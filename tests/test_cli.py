@@ -23,6 +23,24 @@ def test_parser_with_driver():
     with pytest.raises(SystemExit):
         parser.parse_args([url, "--driver", "local"])
 
+def test_driver_with_unknown_driver():
+    """
+    The parser will exit if the driver name is unknown
+    :return:
+    """
+    parser = cli.create_parser()
+    with pytest.raises(SystemExit):
+        parser.parse_args([url, '--driver', 'azure', 'destination'])
+
+def test_parser_with_known_drivers():
+    """
+    The parser will not exit if the driver name is known
+    :return:
+    """
+    parser = cli.create_parser()
+    for driver in ['local', 's3']:
+        assert parser.parse_args([url, '--driver', driver, 'destination'])
+
 
 def test_parser_with_driver_and_destination():
     """
